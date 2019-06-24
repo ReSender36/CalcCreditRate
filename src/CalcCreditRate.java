@@ -3,13 +3,24 @@ import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 
 public class CalcCreditRate {
+
+    private int iSumCredit ;
+    private double dPersFeeYear ;
+
+    public CalcCreditRate(int iSumCreditLoc, double dPersFeeYearLoc){
+        iSumCredit = iSumCredit ;
+        dPersFeeYear = dPersFeeYearLoc ;
+
+    }
     public static void main(String[] args) throws Exception {
+        CalcCreditRate credRate1 = new CalcCreditRate() ;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Введите примерную сумму кредита: ");
-        int iSumCredit =  Integer.parseInt(reader.readLine()) ;
+        iSumCredit =  Integer.parseInt(reader.readLine()) ;
         System.out.print("Введите расчетную процентную ставку: ");
         double dPercentFeeYear = Double.parseDouble(reader.readLine()) ;
-        int[] iQtyMonths ;
+        int[] iQtyMonths = {12, 36, 60} ;
+
 
         boolean bUseStandartTimeLine = false ;
         boolean bCorrectSymbol = false ;
@@ -28,27 +39,29 @@ public class CalcCreditRate {
         if (sel.equals("Y"))
             bUseStandartTimeLine = true;
 
-        if (bUseStandartTimeLine) {
+        if (!bUseStandartTimeLine) {
 //            System.out.println("Стандартные интервалы");
-            iQtyMonths[] = {12, 36, 60};
-        }else{
-            System.out.print("Введите планируемую продолжительность кредита в месяцах: ");
-            iQtyMonths[] = {Integer.parseInt(reader.readLine())} ;
+//            int iQtyMonths[] = new int[3] ;
+//            iQtyMonths[] = ;
+             System.out.print("Введите планируемую продолжительность кредита в месяцах: ");
+            int iQty = Integer.parseInt(reader.readLine()) ;
+            iQtyMonths = new int[1] ;
+            iQtyMonths[0] = iQty ;
         }
 
-        for (int i = 0; i <= iQtyMonths.length() - 1; i++) {
+        for (int i = 0; i < iQtyMonths.length; i++) {
             double dPercentFeeMonth = dPercentFeeYear / 100 / 12;
             double dPercenthMonthWidthrawal = iSumCredit * dPercentFeeMonth;
-            double dCreditMonthWidthrawal = dPercentFeeMonth + (dPercentFeeMonth / (Math.pow((1 + dPercentFeeMonth), iQtyMonths) - 1)) * iSumCredit;
-            double dCreditMonthPayCalc = iSumCredit * (dPercentFeeMonth + (dPercentFeeMonth / (Math.pow((1 + dPercentFeeMonth), iQtyMonths) - 1)));
+            double dCreditMonthWidthrawal = dPercentFeeMonth + (dPercentFeeMonth / (Math.pow((1 + dPercentFeeMonth), iQtyMonths[i]) - 1)) * iSumCredit;
+            double dCreditMonthPayCalc = iSumCredit * (dPercentFeeMonth + (dPercentFeeMonth / (Math.pow((1 + dPercentFeeMonth), iQtyMonths[i]) - 1)));
             double dMonthPay = dPercenthMonthWidthrawal + dCreditMonthWidthrawal;
 
-            System.out.println("Берем кредит в размере: " + iSumCredit + "руб. на срок " + iQtyMonths + " мес. с процентной ставкой " + dPercentFeeYear + "% годовых");
+            System.out.println("Берем кредит в размере: " + iSumCredit + "руб. на срок " + iQtyMonths[i] + " мес. с процентной ставкой " + dPercentFeeYear + "% годовых");
             System.out.println("Ежемесячный платеж составит: " + dMonthPay);
 
 
             double dSumCredit = (double) iSumCredit;
-            short iStep = (short) iQtyMonths;
+            short iStep = (short) iQtyMonths[i];
             double dPercentTotal = 0.0;
             DecimalFormat df = new DecimalFormat("#.##");
             while (iStep > 0) {
@@ -65,7 +78,7 @@ public class CalcCreditRate {
 //            System.out.println(Math.round(dMonthPay * 100.0) / 100.0);
             }
             System.out.println();
-            System.out.println("Переплата по кредиту составит: " + dPercentTotal + "руб. Эффективная процентная ставка: " + (Math.round(100 * (dPercentTotal / (double) iSumCredit)) * 10000.0) / 10000.0 + "%");
+            System.out.println("Переплата по кредиту составит: " + df.format(dPercentTotal) + " руб. Эффективная процентная ставка: " + (Math.round(100 * (dPercentTotal / (double) iSumCredit)) * 10000.0) / 10000.0 + "%");
         }
     }
 }
