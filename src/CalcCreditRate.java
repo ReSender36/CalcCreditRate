@@ -6,51 +6,88 @@ public class CalcCreditRate {
 
     private int iSumCredit ;
     private double dPersFeeYear ;
+    private int iTimePeriod ;
 
-    public CalcCreditRate(int iSumCreditLoc, double dPersFeeYearLoc){
-        iSumCredit = iSumCredit ;
-        dPersFeeYear = dPersFeeYearLoc ;
+    public CalcCreditRate(int iSumCreditL, double dPersFeeYearL, int iTimePeriodL){
+        iSumCredit = iSumCreditL ;
+        dPersFeeYear = dPersFeeYearL ;
+        iTimePeriod = iTimePeriodL ;
+    }
+
+    public CalcCreditRate(){
 
     }
+
+    public void set_iSumCredit(int iSumCreditLoc){
+        iSumCredit = iSumCreditLoc ;
+    }
+
+    public int getiSumCredit(){
+        return iSumCredit ;
+    }
+
     public static void main(String[] args) throws Exception {
-        CalcCreditRate credRate1 = new CalcCreditRate() ;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Введите примерную сумму кредита: ");
-        iSumCredit =  Integer.parseInt(reader.readLine()) ;
-        System.out.print("Введите расчетную процентную ставку: ");
-        double dPercentFeeYear = Double.parseDouble(reader.readLine()) ;
-        int[] iQtyMonths = {12, 36, 60} ;
 
 
-        boolean bUseStandartTimeLine = false ;
-        boolean bCorrectSymbol = false ;
-        String sel = "" ;
-        System.out.print("Использовать для расчета стандартные интервалы времени: 12, 36 и 60  месяцев? (Ответ Y или N) ");
-        while (!bCorrectSymbol) {
-            sel = reader.readLine();
-            if (1 == sel.length()) {
-                if (sel.equals("Y") || sel.equals("N"))
-                    bCorrectSymbol = true;
-                else
-                    System.out.print("Повторите ввод (неправильный  символ): ");
-            }else
-                System.out.print("Повторите ввод (слишком много символов): ");
-        }
-        if (sel.equals("Y"))
-            bUseStandartTimeLine = true;
+        void inputParameters() {
+            boolean bUseStandartInterval = 0 ;
+            int[] miTimePeriods = {} ;
+            int iSumCreditL = 0 ;
 
-        if (!bUseStandartTimeLine) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.print("Введите примерную сумму кредита: ");
+            iSumCreditL = Integer.parseInt(reader.readLine());
+            System.out.print("Введите расчетную процентную ставку: ");
+            double dPersFeeYearL = Double.parseDouble(reader.readLine());
+            miTimePeriods = {12, 36, 60};
+
+            boolean bUseStandartTimeLine = false;
+            boolean bCorrectSymbol = false;
+            String sel = "";
+            System.out.print("Использовать для расчета стандартные интервалы времени: 12, 36 и 60  месяцев? (Ответ Y или N) ");
+            while (!bCorrectSymbol) {
+                sel = reader.readLine();
+                if (1 == sel.length()) {
+                    if (sel.equals("Y") || sel.equals("N"))
+                        bCorrectSymbol = true;
+                    else
+                        System.out.print("Повторите ввод (неправильный  символ): ");
+                } else
+                    System.out.print("Повторите ввод (слишком много символов): ");
+            }
+            if (sel.equals("Y"))
+                bUseStandartTimeLine = true;
+
+            if (!bUseStandartTimeLine) {
 //            System.out.println("Стандартные интервалы");
 //            int iQtyMonths[] = new int[3] ;
 //            iQtyMonths[] = ;
-             System.out.print("Введите планируемую продолжительность кредита в месяцах: ");
-            int iQty = Integer.parseInt(reader.readLine()) ;
-            iQtyMonths = new int[1] ;
-            iQtyMonths[0] = iQty ;
+                System.out.print("Введите планируемую продолжительность кредита в месяцах: ");
+                int iQty = Integer.parseInt(reader.readLine());
+                miTimePeriods = new int[1];
+                miTimePeriods[0] = iQty;
+            }
         }
 
-        for (int i = 0; i < iQtyMonths.length; i++) {
-            double dPercentFeeMonth = dPercentFeeYear / 100 / 12;
+        void createObjects(){
+            for (int i = 0; i < miTimePeriods.length; i++) {
+                CalcCreditRate ccr = new CalcCreditRate(miTimePeriods[i]);
+                ccr.calculatingCreditParameter();
+                if (1 == i) {
+                    CalcCreditRate ccr1 = new CalcCreditRate(miTimePeriods[i]);
+                    ccr1.calculatingCreditParameter();
+                }
+                else if (2 == i) {
+                    CalcCreditRate ccr2 = new CalcCreditRate(miTimePeriods[i]);
+                    ccr2.calculatingCreditParameter();
+                }
+            }
+        }
+    }
+
+    public void calculatingCreditParameter(){
+        for (int i = 0; i < miTimePeriods.length; i++) {
+            double dPercentFeeMonth = dPersFeeYear / 100 / 12;
             double dPercenthMonthWidthrawal = iSumCredit * dPercentFeeMonth;
             double dCreditMonthWidthrawal = dPercentFeeMonth + (dPercentFeeMonth / (Math.pow((1 + dPercentFeeMonth), iQtyMonths[i]) - 1)) * iSumCredit;
             double dCreditMonthPayCalc = iSumCredit * (dPercentFeeMonth + (dPercentFeeMonth / (Math.pow((1 + dPercentFeeMonth), iQtyMonths[i]) - 1)));
