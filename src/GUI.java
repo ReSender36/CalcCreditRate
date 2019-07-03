@@ -1,17 +1,30 @@
 import javax.swing.*;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements ActionListener {
+    JTextField textFieldSumCred ;
+    JTextField textFieldPersYearFee ;
+    JTextField textFieldCreditPeriod ;
+
     public GUI(){
         JLabel labelSumCred = new JLabel("Сумма кредита") ;
-        JTextField textFieldSumCred = new JTextField() ;
+        textFieldSumCred = new JTextField() ;
+        JLabel labelPersYearFee = new JLabel("Процентная ставка") ;
+        textFieldPersYearFee = new JTextField() ;
+        JLabel labelCreditPeriod = new JLabel("Срок кредита") ;
+        textFieldCreditPeriod = new JTextField() ;
+
         JCheckBox caseCheckBox = new JCheckBox("Стандартные интервалы") ;
         JCheckBox wrapCheckBox = new JCheckBox("Wrap Around") ;
         JCheckBox wholeCheckBox = new JCheckBox("Whole Words") ;
         JCheckBox backCheckBox = new JCheckBox("Search Backwards") ;
         JButton findButton = new JButton("Расчитать!") ;
+        findButton.addActionListener(this);
         JButton cancelButton = new JButton("Закрыть") ;
 
         caseCheckBox.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
@@ -63,17 +76,11 @@ public class GUI extends JFrame {
 
     }
 
-//    public static void main(String[] args){
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            @Override
-//            public void run() {
-//                try{
-//                   UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-//                }catch(Exception ex){
-//                    ex.printStackTrace();
-//                }
-//                new GUI().setVisible(true);
-//            }
-//        });
-//    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String str = textFieldSumCred.getText() ;
+        int iStr = Integer.parseInt(str) ;
+//        CalcCreditRate ccr = new CalcCreditRate(iStr) ;
+//        textFieldSumCred.setText("325");
+    }
 }
