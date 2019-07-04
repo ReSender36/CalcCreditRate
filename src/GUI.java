@@ -11,6 +11,11 @@ public class GUI extends JFrame implements ActionListener {
     JTextField textFieldPersYearFee ;
     JTextField textFieldCreditPeriod ;
 
+    JButton calcButton ;
+    JButton closeButton ;
+
+    JCheckBox chbStdIntervals ;
+
     public GUI(){
         JLabel labelSumCred = new JLabel("Сумма кредита") ;
         textFieldSumCred = new JTextField() ;
@@ -19,15 +24,18 @@ public class GUI extends JFrame implements ActionListener {
         JLabel labelCreditPeriod = new JLabel("Срок кредита") ;
         textFieldCreditPeriod = new JTextField() ;
 
-        JCheckBox caseCheckBox = new JCheckBox("Стандартные интервалы") ;
+        chbStdIntervals = new JCheckBox("Стандартные интервалы") ;
+        chbStdIntervals.addActionListener(this);
         JCheckBox wrapCheckBox = new JCheckBox("Wrap Around") ;
         JCheckBox wholeCheckBox = new JCheckBox("Whole Words") ;
         JCheckBox backCheckBox = new JCheckBox("Search Backwards") ;
-        JButton findButton = new JButton("Расчитать!") ;
-        findButton.addActionListener(this);
-        JButton cancelButton = new JButton("Закрыть") ;
 
-        caseCheckBox.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        calcButton = new JButton("Расчитать!") ;
+        calcButton.addActionListener(this);
+        closeButton = new JButton("Закрыть") ;
+        closeButton.addActionListener(this);
+
+        chbStdIntervals.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         wrapCheckBox.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         wholeCheckBox.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
         backCheckBox.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
@@ -38,38 +46,51 @@ public class GUI extends JFrame implements ActionListener {
         layout.setAutoCreateContainerGaps(true) ;
 
         layout.setHorizontalGroup(layout.createSequentialGroup()
+            .addGroup(layout.createParallelGroup(LEADING)
+               .addComponent(labelSumCred)
+               .addComponent(labelPersYearFee)));
+
+        layout.linkSize(SwingConstants.HORIZONTAL, calcButton, closeButton);
+
+        layout.setVerticalGroup(layout.createSequentialGroup());
+
+/*        layout.setHorizontalGroup(layout.createSequentialGroup()
                 .addComponent(labelSumCred)
                 .addGroup(layout.createParallelGroup(LEADING)
                         .addComponent(textFieldSumCred)
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(LEADING)
-                                        .addComponent(caseCheckBox)
-                                        .addComponent(wholeCheckBox))
+                                       .addComponent(chbStdIntervals)
+                                       .addComponent(wholeCheckBox)
+                                                                               )
                                 .addGroup(layout.createParallelGroup(LEADING)
                                         .addComponent(wrapCheckBox)
-                                        .addComponent(backCheckBox))))
+                                        .addComponent(backCheckBox)
+                                )))
                 .addGroup(layout.createParallelGroup(LEADING)
-                        .addComponent(findButton)
-                        .addComponent(cancelButton))
+                        .addComponent(calcButton)
+                        .addComponent(closeButton))
         );
-        layout.linkSize(SwingConstants.HORIZONTAL, findButton, cancelButton);
+        layout.linkSize(SwingConstants.HORIZONTAL, calcButton, closeButton);
 
         layout.setVerticalGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(BASELINE)
                         .addComponent(labelSumCred)
                         .addComponent(textFieldSumCred)
-                        .addComponent(findButton))
+                        .addComponent(calcButton))
                 .addGroup(layout.createParallelGroup(LEADING)
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(BASELINE)
-                                        .addComponent(caseCheckBox)
-                                        .addComponent(wrapCheckBox))
+                                        .addComponent(chbStdIntervals)
+                                       .addComponent(wrapCheckBox)
+                                       )
                                 .addGroup(layout.createParallelGroup(BASELINE)
                                         .addComponent(wholeCheckBox)
-                                        .addComponent(backCheckBox)))
-                        .addComponent(cancelButton))
+                                        .addComponent(backCheckBox)
+                                ))
+                        .addComponent(closeButton))
         );
-
+*/
         setTitle("Расчет параметров кредита");
         pack();
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -78,8 +99,18 @@ public class GUI extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String str = textFieldSumCred.getText() ;
-        int iStr = Integer.parseInt(str) ;
+        if (e.getSource() == closeButton) {
+            System.exit(0);
+        } else if (calcButton == e.getSource()) {
+            String str = textFieldSumCred.getText();
+            int iStr = Integer.parseInt(str);
+            System.out.println(iStr);
+        } else if (chbStdIntervals == e.getSource()){
+            if (chbStdIntervals.isSelected())
+                textFieldCreditPeriod.setVisible(false);
+            else
+                textFieldCreditPeriod.setVisible(true);
+        }
 //        CalcCreditRate ccr = new CalcCreditRate(iStr) ;
 //        textFieldSumCred.setText("325");
     }
